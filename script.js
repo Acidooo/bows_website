@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 setTimeout(() => {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
+                }, index * 50);
 
                 revealObserver.unobserve(entry.target);
             }
@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function () {
     revealElements.forEach((el) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
         revealObserver.observe(el);
     });
 
