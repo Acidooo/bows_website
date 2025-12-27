@@ -3,8 +3,8 @@
  * Smooth scrolling, hamburger menu, animations, and interactivity
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
+
     // ========================================
     // DOM Elements
     // ========================================
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToTop = document.getElementById('back-to-top');
     const contactForm = document.getElementById('contact-form');
     const statNumbers = document.querySelectorAll('.stat-number');
-    
+
     // ========================================
     // Smooth Scrolling
     // ========================================
@@ -25,34 +25,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const headerOffset = 80;
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            
+
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             });
         }
     }
-    
+
     // Handle navigation link clicks
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const target = this.getAttribute('href');
-            
+
             // Close mobile menu if open
             if (navMenu.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
                 document.body.style.overflow = '';
             }
-            
+
             smoothScroll(target);
         });
     });
-    
+
     // Handle all anchor links with hash
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const target = this.getAttribute('href');
             if (target !== '#' && target.length > 1) {
                 e.preventDefault();
@@ -60,14 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // ========================================
     // Hamburger Menu Toggle
     // ========================================
-    hamburger.addEventListener('click', function() {
+    hamburger.addEventListener('click', function () {
         this.classList.toggle('active');
         navMenu.classList.toggle('active');
-        
+
         // Prevent body scroll when menu is open
         if (navMenu.classList.contains('active')) {
             document.body.style.overflow = 'hidden';
@@ -77,9 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.setAttribute('aria-expanded', 'false');
         }
     });
-    
+
     // Close menu on click outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.setAttribute('aria-expanded', 'false');
         }
     });
-    
+
     // Close menu on escape key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && navMenu.classList.contains('active')) {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
@@ -97,47 +97,47 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.setAttribute('aria-expanded', 'false');
         }
     });
-    
+
     // ========================================
     // Header Scroll Effect
     // ========================================
     let lastScroll = 0;
-    
-    window.addEventListener('scroll', function() {
+
+    window.addEventListener('scroll', function () {
         const currentScroll = window.pageYOffset;
-        
+
         // Add scrolled class for header background
         if (currentScroll > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-        
+
         // Show/hide back to top button
         if (currentScroll > 500) {
             backToTop.classList.add('visible');
         } else {
             backToTop.classList.remove('visible');
         }
-        
+
         // Update active nav link based on scroll position
         updateActiveNavLink();
-        
+
         lastScroll = currentScroll;
     });
-    
+
     // ========================================
     // Active Navigation Link
     // ========================================
     function updateActiveNavLink() {
         const sections = document.querySelectorAll('section[id]');
         const scrollPosition = window.pageYOffset + 150;
-        
+
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.offsetHeight;
             const sectionId = section.getAttribute('id');
-            
+
             if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                 navLinks.forEach(link => {
                     link.classList.remove('active');
@@ -148,17 +148,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // ========================================
     // Back to Top Button
     // ========================================
-    backToTop.addEventListener('click', function() {
+    backToTop.addEventListener('click', function () {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     });
-    
+
     // ========================================
     // Animate Stats Counter
     // ========================================
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const duration = 2000; // 2 seconds
         const step = target / (duration / 16); // 60fps
         let current = 0;
-        
+
         const updateCounter = () => {
             current += step;
             if (current < target) {
@@ -177,10 +177,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.textContent = target;
             }
         };
-        
+
         updateCounter();
     }
-    
+
     // Intersection Observer for stats animation
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -191,42 +191,42 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, { threshold: 0.5 });
-    
+
     const statsSection = document.querySelector('.stats');
     if (statsSection) {
         statsObserver.observe(statsSection);
     }
-    
+
     // ========================================
     // Contact Form Handling
     // ========================================
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
-            
+
             // Simple validation
             if (!data.name || !data.email || !data.message) {
                 showNotification('Lütfen tüm zorunlu alanları doldurun.', 'error');
                 return;
             }
-            
+
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(data.email)) {
                 showNotification('Lütfen geçerli bir e-posta adresi girin.', 'error');
                 return;
             }
-            
+
             // Simulate form submission
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<span>Gönderiliyor...</span>';
             submitBtn.disabled = true;
-            
+
             // Simulate API call
             setTimeout(() => {
                 showNotification('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.', 'success');
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1500);
         });
     }
-    
+
     // ========================================
     // Notification System
     // ========================================
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (existingNotification) {
             existingNotification.remove();
         }
-        
+
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <span>${message}</span>
             <button class="notification-close" aria-label="Kapat">&times;</button>
         `;
-        
+
         // Add styles
         notification.style.cssText = `
             position: fixed;
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 15px;
             transition: transform 0.3s ease;
         `;
-        
+
         const closeBtn = notification.querySelector('.notification-close');
         closeBtn.style.cssText = `
             background: transparent;
@@ -286,20 +286,20 @@ document.addEventListener('DOMContentLoaded', function() {
             line-height: 1;
             opacity: 0.8;
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Animate in
         setTimeout(() => {
             notification.style.transform = 'translateX(-50%) translateY(0)';
         }, 10);
-        
+
         // Close button handler
         closeBtn.addEventListener('click', () => {
             notification.style.transform = 'translateX(-50%) translateY(100px)';
             setTimeout(() => notification.remove(), 300);
         });
-        
+
         // Auto close after 5 seconds
         setTimeout(() => {
             if (notification.parentElement) {
@@ -308,59 +308,65 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     }
-    
+
     // ========================================
     // Newsletter Form
     // ========================================
     const newsletterForm = document.querySelector('.newsletter-form');
     if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
+        newsletterForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const input = this.querySelector('input[type="email"]');
-            
+
             if (!input.value) {
                 showNotification('Lütfen e-posta adresinizi girin.', 'error');
                 return;
             }
-            
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(input.value)) {
                 showNotification('Lütfen geçerli bir e-posta adresi girin.', 'error');
                 return;
             }
-            
+
             showNotification('Bültene başarıyla abone oldunuz!', 'success');
             input.value = '';
         });
     }
-    
+
     // ========================================
     // Scroll Reveal Animation
     // ========================================
     const revealElements = document.querySelectorAll('.service-card, .project-card, .contact-card, .about-image, .about-text');
-    
+
     const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                // Add staggered delay based on the index within the current batch
+                // This ensures elements appearing together cascade nicely, 
+                // but elements further down don't have huge delays
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+
                 revealObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-    
-    revealElements.forEach((el, index) => {
+
+    revealElements.forEach((el) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
-        el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         revealObserver.observe(el);
     });
-    
+
     // ========================================
     // Image Lazy Loading Enhancement
     // ========================================
     const lazyImages = document.querySelectorAll('img[src]');
-    
+
     const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -370,32 +376,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, { threshold: 0.1, rootMargin: '50px' });
-    
+
     lazyImages.forEach(img => {
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.5s ease';
-        img.addEventListener('load', function() {
+        img.addEventListener('load', function () {
             imageObserver.observe(this);
         });
         if (img.complete) {
             imageObserver.observe(img);
         }
     });
-    
+
     // ========================================
     // Keyboard Navigation
     // ========================================
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         // Skip to main content with Tab
         if (e.key === 'Tab') {
             document.body.classList.add('keyboard-navigation');
         }
     });
-    
-    document.addEventListener('mousedown', function() {
+
+    document.addEventListener('mousedown', function () {
         document.body.classList.remove('keyboard-navigation');
     });
-    
+
     // ========================================
     // Performance: Debounce Scroll Events
     // ========================================
@@ -410,10 +416,10 @@ document.addEventListener('DOMContentLoaded', function() {
             timeout = setTimeout(later, wait);
         };
     }
-    
+
     // Apply debounce to scroll handler
     const debouncedScrollHandler = debounce(updateActiveNavLink, 10);
-    
+
     // ========================================
     // Console Welcome Message
     // ========================================
